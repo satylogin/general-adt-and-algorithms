@@ -1,0 +1,127 @@
+/*
+ *	Program by Satyarth Agrahari - stack adt
+ *	---------------------------------------------------------------------
+ *	an implementation of stack adt to use for different stack algorithms.
+ *	This is for an character stack
+*/
+#include <iostream>
+
+using namespace std;
+
+#define MAX_SIZE 100000
+#define ERROR -99999999
+#define SUCCESS 1
+
+/*
+ *	stack structure
+ *	---------------------------------------------------
+ *	it has an array to store the values and a top variable to store the 
+ * 	index of topmost element.
+ */
+struct stack {
+	int top;
+	char stk[MAX_SIZE];
+};
+
+stack* create_stack(void); // to create a new stack and return the address of the stack
+bool is_empty(stack *); //to check whether the given stack is empty or not
+bool is_full(stack *); //to check whether the given stack is full or not
+int size(stack *); //to get the nummber of elements in the stack
+char top(stack *); // to get the topmost element in the stack
+void push(stack *, char); // to insert a data at the top of the stack
+char pop(stack *); //to retrun the top most data of the stack and return it
+
+int main()
+{
+	// your code goes here
+
+	return 0;
+}
+
+/*	create_stack()
+ *	----------------------------------------------------
+ *	this function allocates a memory in heap and returns 
+ *	the base address to the calling pointer.
+ *	It also allocates the top to point at a negative index.
+*/
+stack* create_stack(void)
+{
+	stack *s = new stack;
+	s->top = -1;
+	return s;
+}
+
+/*	is_empty()
+ *	----------------------------------------------------
+ *	This function checks whether the given stack is empty or not.
+ *	The value returned will be true if the stack is empty and 
+ *	false if the stack has atleast one element
+ */
+bool is_empty(stack *s)
+{
+	return (s->top == -1);
+}
+
+/*	is_full()
+ *	----------------------------------------------------
+ *	This function checks whether the given stack is full or not.
+ *	The value returned will be true if the stack is full and 
+ *	false if the stack has space for atleast one element
+ */
+bool is_full(stack *s)
+{
+	return (s->top == (MAX_SIZE - 1));
+}
+
+/*	size()
+ *	----------------------------------------------------
+ *	this function returns the number of elements present in the stack
+ */
+int size(stack *s)
+{
+	return (s->top + 1);
+}
+
+/*	top()
+ *	----------------------------------------------------
+ *	This function returns the top most value of the stack.
+ *	In case the stack is empty, the function returns an ERROR value
+ *	to be handled effectivly by the coder.
+ */
+char top(stack *s)
+{
+	if (is_empty(s)) {
+		//add error condition according to your choice
+		//and program specification
+	} else {
+		return (s->stk[s->top]);
+	}
+}
+
+/*	push()
+ *	----------------------------------------------------
+ *	this function adds the data at the top of the stack.
+ *	in case of overflow it returns an ERROR to be handled by the coder
+ */
+void push(stack *s, char data)
+{
+	if (is_full(s)) {
+		//create an error handle condition according to program specification
+	} else {
+		s->stk[++(s->top)] = data;
+	}
+}
+
+/*	pop()
+ *	----------------------------------------------------
+ *	this function removes and returns the data at the top of the stack.
+ *	in case of underflow it returns an ERROR to be managed by the coder
+ */
+char pop(stack *s)
+{
+	if (is_empty(s)) {
+		// create error handle
+	} else {
+		return (s->stk[(s->top)--]);
+	}
+}
