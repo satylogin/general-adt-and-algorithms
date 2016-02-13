@@ -7,3 +7,5 @@ Some files have versions written with them -
   Users can use any version and then modify it according to their need.
 
 The repository also has some general algorithms and some of their implementation. It gives a raw idea that a given algorithm can be modified for user benefit. These codes encourage the user to midify them and try new approaches.
+
+Note - Binary search algorithms require the array to be sorted.
