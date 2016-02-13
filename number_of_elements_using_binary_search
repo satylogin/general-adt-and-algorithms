@@ -1,0 +1,92 @@
+/* *
+ * Code - Binary search-number of elements, Author - Satyarth Agrahari
+ * -----------------------------------------------------------
+ * The following is a c implementaion of binary search using 
+ * iterative method. It returns the number of occurace of the number
+ * in the array, if there are multiple occurance of the number.
+ * The idea is to find first and last occurance of number, and give
+ * difference of index + 1 as result.
+ */
+#include <stdio.h>
+
+int binary_search_first(int *, int, int, int);
+int binary_search_last(int *, int, int, int);
+
+int main()
+{
+	int n, i, q, number;
+	scanf("%d", &n); //number of inputs
+	int num[n]; 
+	//getting the numbers from user
+	for (i = 0; i < n; i++) {
+		scanf("%d", &num[i]);
+	}
+
+	scanf("%d", &q); //number of queries
+	for (i = 0; i < q; i++) {
+		scanf("%d", &number);
+		printf("The element is at %d index\n", binary_search_last(num, 0, n-1, number) - binary_search_first(num, 0, n-1, number) + 1);
+	}
+
+	return 0;
+}
+
+/* *
+ * binary_search()
+ * ---------------------------------------------------------
+ * The following program works if the array is already sorted.
+ * It works on divide and conquer algorithm. We search for an
+ * element by checking the middle element. If the mid element
+ * is found Then the value of index is returned. If the value
+ * at mid is < the required number, we have to search in the 
+ * right half, and if number > then we have to search in left 
+ * half. If the element is not found, start becomes more than
+ * end and then value -1 is returned.
+ */
+
+int binary_search_first(int num[], int start, int end, int number)
+{
+	int index = -1, mid;
+	while (start <= end) {
+		mid = start + (end - start) / 2;
+		if (num[mid] == number) {
+			index = mid;
+			end = mid - 1; // the change part, we do not return but go on in left half.
+		} else if (num[mid] < number) {
+			start = mid + 1;
+		} else if (num[mid] > number) {
+			end = mid - 1;
+		}
+	}
+	return index;
+}
+
+/* *
+ * binary_search()
+ * ---------------------------------------------------------
+ * The following program works if the array is already sorted.
+ * It works on divide and conquer algorithm. We search for an
+ * element by checking the middle element. If the mid element
+ * is found Then the value of index is returned. If the value
+ * at mid is < the required number, we have to search in the 
+ * right half, and if number > then we have to search in left 
+ * half. If the element is not found, start becomes more than
+ * end and then value -1 is returned.
+ */
+
+int binary_search_last(int num[], int start, int end, int number)
+{
+	int index = -1, mid;
+	while (start <= end) {
+		mid = start + (end - start) / 2;
+		if (num[mid] == number) {
+			index = mid;
+			start = mid + 1; // the change part, we do not return but go on in right half.
+		} else if (num[mid] < number) {
+			start = mid + 1;
+		} else if (num[mid] > number) {
+			end = mid - 1;
+		}
+	}
+	return index;
+}
