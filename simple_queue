@@ -1,0 +1,163 @@
+/* *
+ * Code - single queue, Author - Satyarth Agrahari
+ * ----------------------------------------------------------
+ * The following is a general queue implementation using array
+ * in c language. 
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 100
+#define ERROR -999999999
+#define SUCCESS 1
+
+/* *
+ * Structure definition of our queue
+ * ---------------------------------
+ */
+typedef struct {
+	int que[MAX_SIZE];
+	int front;
+	int rear;
+} queue;
+
+queue* create_queue(void);	//the function to create a new queue
+int is_full(queue *);		//the function to check whether queue is full or not
+int is_empty(queue *);		//the function to check whether queue is empty or not
+void enqueue(queue *, int);	//the function to insert data at the back of the queue
+int dequeue(queue *);		//to remove and return the data at front
+int front(queue *);		//to return the front element without deleting
+
+int main()
+{
+	queue *q = create_queue();
+	int data;
+	char str[30];
+
+	//driver code
+	scanf("%s", str);	
+	while (strcmp(str, "exit") != 0) {
+		if (strcmp(str, "enqueue") == 0) {
+			scanf("%d", &data);
+			enqueue(q, data);
+		} else if (strcmp(str, "dequeue") == 0) {
+			data = dequeue(q);
+			if (data != ERROR) {
+				printf("The data in the front was %d\n", data);
+			}
+		} else if (strcmp(str, "front") == 0) {
+			data = front(q);
+			if (data != ERROR) {
+				printf("The data in the front is %d\n", data);
+			}
+		}
+
+		scanf("%s", str);
+	}
+
+	return 0;
+}
+
+/* *
+ * create_queue()
+ * ----------------------------------------------
+ * The function to create a queue and return the 
+ * adders of queue. The front and rear are initialised
+ * to -1 index.
+ */
+queue* create_queue(void)
+{
+	//allocate memeory and initilise front and rear
+	queue *q = (queue *)malloc(sizeof(queue));
+	q->front = -1;
+	q->rear = -1;
+	return q;
+}
+
+/* *
+ * is_full()
+ * ----------------------------------------------
+ * The function is used to check if the queue is
+ * full or not. if the queue is full success is returned
+ * else error is returned.
+ */
+int is_full(queue *q)
+{
+	return (q->rear == (MAX_SIZE - 1));
+}
+
+/* *
+ * is_empty()
+ * ----------------------------------------------
+ * The function is used to check if the queue is
+ * empty or not. if the queue is empty success is 
+ * returned else error is returned.
+ */
+int is_empty(queue *q)
+{
+	return ((q->rear == -1) && (q->front == -1));
+}
+
+/* *
+ * enqueue()
+ * ----------------------------------------------
+ * The function to enter data at the end of the queue
+ * We increse the value of rear and then add the 
+ * element at the rear index.
+ */
+void enqueue(queue *q, int data)
+{
+	if (is_full(q)) {
+		printf("Overflow\n");
+	} else if (is_empty(q)) {
+		q->front++;
+		q->que[++(q->rear)] = data;
+	} else {
+		q->que[++(q->rear)] = data;
+	}
+}
+
+/* *
+ * dequeue()
+ * ----------------------------------------------
+ * The function to remove data at start of queue
+ * We increse the value of front. The array now 
+ * store a garbage value at previous index. The 
+ * front value is returned also.
+ */
+int dequeue(queue *q)
+{
+	int data;
+	if (is_empty(q)) {
+		printf("Underflow\n");
+		return ERROR;
+	} else if (q->front == q->rear) {
+		data = q->que[q->front];
+		q->front = -1;
+		q->rear = -1;		
+	} else {
+		return (q->que[(q->front)++]);
+	}
+
+	return data;
+}
+
+/* *
+ * front()
+ * ----------------------------------------------
+ * The function to return data at start of queue
+ * We increse the value of front. The array now 
+ * store a garbage value at previous index. The 
+ * front value is returned also.
+ */
+int front(queue *q)
+{
+	if (is_empty(q)) {
+		printf("Underflow\n");
+		return ERROR;
+	} else {
+		return (q->que[q->front]);
+	}
+}
