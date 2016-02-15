@@ -9,3 +9,5 @@ Some files have versions written with them -
 The repository also has some general algorithms and some of their implementation. It gives a raw idea that a given algorithm can be modified for user benefit. These codes encourage the user to midify them and try new approaches.
 
 Note - Binary search algorithms require the array to be sorted.
+
+It also contains some sorting algorithms. These can be used indirectly to solve other problems and are henceforth necessary to be mentioned.
