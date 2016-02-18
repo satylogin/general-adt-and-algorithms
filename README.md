@@ -11,3 +11,5 @@ The repository also has some general algorithms and some of their implementation
 Note - Binary search algorithms require the array to be sorted.
 
 It also contains some sorting algorithms. These can be used indirectly to solve other problems and are henceforth necessary to be mentioned.
+
+Code for hashing using open chain uses mod function for mapping keys. User can change hash_function to uses whatever hashing they want to use. This is simply the simplest approach for getting key value.
