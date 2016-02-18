@@ -1,0 +1,230 @@
+/* *
+ * Program- Implementation of hashing, Code by- Satyarth Agrahari
+ * --------------------------------------------------------------
+ * The following is an implementation of hashing in c language.
+ * At the time of collision, we use open chain for resolution.
+ * The hash map used is simple mod function.
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define SIZE 10
+
+/* *
+ * Structure of data to hold value in hash table
+ * ---------------------------------------------
+ * The data is the data stored at particular key
+ * and next will point to next value that is mapped
+ * to the same key if it exist and to NULL if it
+ * does not exist
+ */
+struct node {
+	int data;
+	struct node * next;
+};
+
+int hash_function(int );			// to return the mapped value of key
+void insert(struct node** , int);		// to insert an element in a key value place
+void head(struct node**, int);			// to insert element into the hash table
+void display(struct node**);			// print elements at all location
+void search(struct node**, int);		// to search whether a given value is mapped or not
+void delete(struct node**, int);		// to delete elements provided by user
+
+int main()
+{
+	struct node* hash[SIZE];
+	int n, i, j, k, data;
+
+	for (i = 0; i < SIZE; i++) {
+		hash[i] = NULL;
+	}
+
+	printf("Enter the number of values to be stored\n");
+	scanf("%d", &n); // number of data to be stored
+	printf("Enter the values:\n");
+
+	for (i = 0; i < n; i++) {
+		scanf("%d", &data);
+		insert(hash, data);
+	}
+
+	display(hash);
+
+	printf("Enter the number of elements to be searched\n");
+	scanf("%d", &k);
+	printf("Please enter the numbers:\n");
+
+	for (i = 0; i < k; i++) {
+		scanf("%d", &data);
+		search(hash, data);
+	}
+
+	printf("Enter the number of elements to be deleted\n");
+	scanf("%d", &k);
+	printf("Please enter the numbers:\n");
+
+	for (i = 0; i < k; i++) {
+		scanf("%d", &data);
+		delete(hash, data);
+	}
+
+	display(hash);
+
+	return 0;
+}
+
+/* *
+ * hash_function() 
+ * -------------------------------------------------
+ * This function returns the value of a data mapped
+ * to a particular index of array to store.
+ */
+int hash_function(int n)
+{
+	// we use simple modular key hashing
+	// in order to make implemetation easy.
+	return (n % SIZE);
+}
+
+/* *
+ * insert() 
+ * -------------------------------------------------
+ * This function will map the data to a particular 
+ * key and then insert it at that location.
+ */
+void insert(struct node* hash[], int data)
+{
+	// to get the key to store data
+	int key = hash_function(data);
+
+	// to insert the element at the location.
+	head(&hash[key], data);
+}
+
+/* *
+ * head() 
+ * -------------------------------------------------
+ * This function will insert data at head of given 
+ * location
+ */
+void head(struct node** root, int data)
+{
+	struct node* tmp = (struct node*)malloc(sizeof(struct node));
+	tmp->data = data;
+	tmp->next = *root;
+	*root = tmp;
+}
+
+/* *
+ * display() 
+ * -------------------------------------------------
+ * This function will display data at all location
+ */
+void display(struct node* hash[])
+{
+	int i;
+	struct node *p;
+
+	// for the ith key in the hashh table
+	for (i = 0; i < SIZE; i++) {
+		//print the index of table
+		printf("%d : ", i);
+
+		// Check whether the list is empty or not
+		if (hash[i] != NULL) {
+			p = hash[i];
+	
+			// iterate over whole list to 
+			// print all the data	
+			while (p != NULL) {
+				printf("%d ",p->data);
+				p = p->next;
+			}
+		}
+		printf("\n");
+	}
+}
+
+/* *
+ * search() 
+ * -------------------------------------------------
+ * This function will seacg data at all location, 
+ * and then will display whether a given data is present
+ * in the hash tble or not.
+ */
+void search(struct node* hash[], int data)
+{
+	int key, flag = 0;
+	struct node *p;
+
+	key = hash_function(data);
+	p = hash[key]; // points to the location that may have the value
+
+	// iterate over whole list till the element is found
+	while (p != NULL) {
+		// if the data is found
+		if (p->data == data) {
+			flag = 1;
+			break;
+		}
+		p = p->next;
+	}
+
+	if (flag == 1) {
+		printf("The element exist in the hash table\n");
+	} else if (flag == 0) {
+		printf("The element does not exist in the hash table\n");
+	}
+}
+
+/* *
+ * delete() 
+ * -------------------------------------------------
+ * This function will search for data and then delete
+ * the data if present. If not, it will print an
+ * error message.
+ */
+void delete(struct node *hash[], int data)
+{
+	int key, flag = 0;
+	struct node *p, *q;
+
+	key = hash_function(data);
+	p = hash[key]; // pointing to location where value may be present
+
+	// if the list is empty, print no data and return
+	if (p == NULL) {
+		printf("No data is present\n");
+		return;
+	} else {
+		// if the first data is the required data
+		if (p->data == data) {
+			hash[key] = p->next;
+			flag = 1;
+		} else {
+			// search for element till it is found or list 
+			// is completely exhausted.
+			while (p != NULL) {
+				q = p;
+				p = p->next;
+				if (p == NULL) {
+					break;
+				} else {
+					if (p->data == data) {
+						flag = 1;
+						q->next = p->next;
+						free(p);
+						break;
+					} 
+				}
+			}
+		}
+	}
+
+	if (flag == 1) {
+		printf("Data deleted successfully\n");
+	} else {
+		printf("No data found\n");
+	}	
+}
