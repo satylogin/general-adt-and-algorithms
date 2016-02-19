@@ -13,3 +13,5 @@ Note - Binary search algorithms require the array to be sorted.
 It also contains some sorting algorithms. These can be used indirectly to solve other problems and are henceforth necessary to be mentioned.
 
 Code for hashing using open chain uses mod function for mapping keys. User can change hash_function to uses whatever hashing they want to use. This is simply the simplest approach for getting key value.
+
+All hashing codes have the same encryption method. User is free to change the method and good change is welcome.
