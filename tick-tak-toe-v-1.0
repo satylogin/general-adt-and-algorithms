@@ -1,0 +1,359 @@
+/**
+ * Program - tick tak toe game, Code by- Satyarth Agrahari
+ * -------------------------------------------------------
+ * The following is c++ implementation of game tick tak
+ * toe game. The game does not just uses random function only
+ * but works on a algorithm to make the game play interesting.
+ * Users are welcome to improve the algorithm. As the basic
+ * moves still has to use random function. Any suggestions are
+ * welcome.
+ */
+
+ #include <iostream>
+ #include <cstring>
+ #include <cstdlib>
+ #include <time.h>
+
+ using namespace std;
+ #define SIZE 3
+
+ char * case_correct(char *);           // this function makes the first letter of name uppercase
+ void lower(char *);                    // this function make the whole response to lower case
+ void print_grid(char *);               // to print the current status of board
+ bool check(char grid[][SIZE]);                    // to check the configuration of board is winning or not
+ void computer_move(char grid[][SIZE]); // algorithm for computer's move
+
+ int main()
+ {
+        start:
+        char name[40], response[40];
+        int count = 0, i, j, flag = 0;
+        char grid[SIZE][SIZE];
+
+        for (i = 0; i < SIZE; i++) {
+                for (j = 0; j < SIZE; j++) {
+                        grid[i][j] = ' ';
+                }
+        }
+
+        cout<<"Welcome to tick tak toe"<<endl<<endl;
+
+        print_grid((char *)grid);
+
+        cout<<endl<<"Please enter your name"<<endl;
+        cin>>name;
+        cout<<"Welcome to game Mr. "<<case_correct(name)<<endl;
+        cout<<"Would you like to make the first move"<<endl;
+        cin>>response;
+        lower(response);
+
+        if (strcmp(response, "no") == 0) {
+                grid[1][1] = '0';
+                count++;
+        }
+
+        print_grid((char *)grid);
+
+        while (count < 9) {
+                cout<<"Enter the co-ordinate, indexed 0 from top left"<<endl;
+                cin>>i>>j;
+                if (grid[i][j] == 'X' || grid[i][j] == '0') {
+                        cout<<"Invalid move"<<endl;
+                        continue;
+                } else {
+                        grid[i][j] = 'X';
+                        count++;
+                }
+
+                if (check(grid)) {
+                        flag = 1;
+                        break;
+                }
+
+                if (count < 9) {
+                        computer_move(grid);
+                        count++;
+
+                        if (check(grid)) {
+                                flag = 1;
+                                break;
+                        }
+                }
+
+                print_grid((char *)grid);
+        }
+
+        if (flag == 1) {
+                print_grid((char *)grid);
+        }
+
+        if (count == 9) {
+                cout<<"No one won!! Try again : (y / n)"<<endl;
+                cin>>response;
+
+                if (strcmp(response, "y") == 0) {
+                        goto start;
+                } else if (strcmp(response, "n") == 0) {
+                        cout<<"Bye"<<endl;
+                        exit(0);
+                }
+        } else {
+                cout<<"Do you want to try again : (y / n)"<<endl;
+                cin>>response;
+
+                if (strcmp(response, "y") == 0) {
+                        goto start;
+                } else {
+                        exit(0);
+                }
+        }
+
+        return 0;
+ }
+
+/**
+ * case_correct()
+ * ------------------------------------------------
+ * This function makes the first letter of string as
+ * upper case.
+ */
+ char * case_correct(char s[])
+ {
+     if (s[0] < 'z' && s[0] > 'a') {
+             s[0] = s[0] - 32;
+     }
+
+     return s;
+ }
+
+/**
+ * lower()
+ * ------------------------------------------------
+ * This function makes the all letter of string as
+ * lower case.
+ */
+ void lower(char s[])
+ {
+     int i = 0;
+     while (s[i] != '\0') {
+             if (s[i] >= 'A' && s[i] <= 'Z') {
+                     s[i] = s[i] + 32;
+             }
+             i++;
+     }
+ }
+
+/**
+ * print_grid()
+ * -------------------------------------------------
+ * The following function prints the current status
+ * of board. It means which all places are filled
+ * by which of the players.
+ */
+ void print_grid(char *grid)
+ {
+     for (int i = 0; i < SIZE; i++) {
+             for (int j = 0; j < SIZE; j++) {
+                     cout<<*(grid + i*SIZE + j);
+                     if (j != (SIZE - 1)) {
+                             cout<<"|";
+                     }
+             }
+             cout<<endl;
+             if (i != (SIZE - 1)) {
+                     for (int j = 0; j < (SIZE - 1); j++) {
+                             cout<<"*-";
+                     }
+                     cout<<"*"<<endl;
+             }
+     }
+ }
+
+/**
+ * check()
+ * ---------------------------------------------------------
+ * This function checks for the validation of board. This
+ * Means whether the board is a winning set or not.
+ */
+ bool check(char grid[][SIZE])
+ {
+     char c, flag = 0;
+
+     // checking for match in a row
+     for (int i = 0; i < SIZE; i++) {
+             if ((grid[i][0] == grid[i][1]) && (grid[i][1] == grid[i][2]) && (grid[i][1] != ' ')) {
+                     flag = 1;
+                     c = grid[i][1];
+                     goto test;
+             }
+     }
+
+     // checking for match in a column
+     for (int i = 0; i < SIZE; i++) {
+             if ((grid[0][i] == grid[1][i]) && (grid[1][i] == grid[2][i]) && (grid[0][i] != ' ')) {
+                     flag = 1;
+                     c = grid[0][i];
+                     goto test;
+             }
+     }
+
+     // checking for primary diagonal match
+     if ((grid[0][0] == grid[1][1]) && (grid[1][1] == grid[2][2]) && (grid[0][0] != ' ')) {
+             c = grid[0][0];
+             flag = 1;
+             goto test;
+     }
+
+     // checking for secondary diagonal match
+     if ((grid[0][2] == grid[1][1]) && (grid[1][1] == grid[2][0]) && (grid[0][2] != ' ')) {
+             c = grid[0][2];
+             flag = 1;
+             goto test;
+     }
+
+     test:
+     // decides if you have won or the computer have won
+     if (c == 'X') {
+             cout<<"Congratulation!!! You won against computer!!!"<<endl;
+     } else if (c == '0') {
+             cout<<"Sorry You lost, better luck next time"<<endl;
+     }
+
+     // if someone has won the game, then execution stops.
+     if (flag == 1) {
+             return true;
+     } else if (flag == 0) {
+             return false;
+     }
+ }
+/**
+ * computer_move()
+ * -----------------------------------------------------------
+ * Computer analyses the board and then decides the correct
+ * move according the present situation.
+ */
+ void computer_move(char grid[][SIZE])
+ {
+        int i, j, m_i, m_j;
+
+        // move if two consequetive blocks are filled
+
+        // checking horizontal board
+        for (i = 0; i < SIZE; i++) {
+                if (((grid[i][1]) == '0') && (grid[i][2] == '0') && (grid[i][0] == ' ')) {
+                        grid[i][0] = '0';
+                        return;
+                } else if ((grid[i][0] == '0') && (grid[i][1] == '0') && (grid[i][2] == ' ')) {
+                        grid[i][2] = '0';
+                        return;
+                } else if ((grid[i][0] == '0') && (grid[i][2] == '0') && (grid[i][1] == ' ')) {
+                        grid[i][1] = '0';
+                        return;
+                }
+        }
+
+        // checking for vertical board
+        for (i = 0; i < SIZE; i++) {
+                if ((grid[0][i] == '0') && (grid[1][i] == '0') && (grid[2][i] == ' ')) {
+                        grid[2][i] = '0';
+                        return;
+                } else if ((grid[0][i] == '0') && (grid[1][i] == ' ') && (grid[2][i] == '0')) {
+                        grid[1][i] = '0';
+                        return;
+                } else if ((grid[0][i] == ' ') && (grid[1][i] == '0') && (grid[2][i] == '0')) {
+                        grid[0][i] = '0';
+                        return;
+                }
+        }
+
+        //checking for primary diagonal
+        if ((grid[0][0] == '0') && (grid[1][1] == '0') && (grid[2][2] == ' ')) {
+                grid[2][2] = '0';
+                return;
+        } else if ((grid[0][0] == '0') && (grid[1][1] == ' ') && (grid[2][2] == '0')) {
+                grid[1][1] = '0';
+                return;
+        } else if ((grid[0][0] == ' ') && (grid[1][1] == '0') && (grid[2][2] == '0')) {
+                grid[0][0] = '0';
+                return;
+        }
+
+        // checking for secondary diagonal
+        if ((grid[0][2] == '0') && (grid[1][1] == '0') && (grid[2][0] == ' ')) {
+                grid[2][0] = '0';
+                return;
+        } else if ((grid[0][2] == '0') && (grid[1][1] == ' ') && (grid[2][0] == '0')) {
+                grid[1][1] = '0';
+                return;
+        } else if ((grid[0][2] == ' ') && (grid[1][1] == '0') && (grid[2][0] == '0')) {
+                grid[0][2] = '0';
+                return;
+        }
+
+        // move if two consequetive blocks of opponent are filled
+
+        // checking horizontal board
+        for (i = 0; i < SIZE; i++) {
+                if (((grid[i][1]) == 'X') && (grid[i][2] == 'X') && (grid[i][0] == ' ')) {
+                        grid[i][0] = '0';
+                        return;
+                } else if ((grid[i][0] == 'X') && (grid[i][1] == 'X') && (grid[i][2] == ' ')) {
+                        grid[i][2] = '0';
+                        return;
+                } else if ((grid[i][0] == 'X') && (grid[i][2] == 'X') && (grid[i][1] == ' ')) {
+                        grid[i][1] = '0';
+                        return;
+                }
+        }
+
+        // checking for vertical board
+        for (i = 0; i < SIZE; i++) {
+                if ((grid[0][i] == 'X') && (grid[1][i] == 'X') && (grid[2][i] == ' ')) {
+                        grid[2][i] = '0';
+                        return;
+                } else if ((grid[0][i] == 'X') && (grid[1][i] == ' ') && (grid[2][i] == 'X')) {
+                        grid[1][i] = '0';
+                        return;
+                } else if ((grid[0][i] == ' ') && (grid[1][i] == 'X') && (grid[2][i] == 'X')) {
+                        grid[0][i] = '0';
+                        return;
+                }
+        }
+
+        //checking for primary diagonal
+        if ((grid[0][0] == 'X') && (grid[1][1] == 'X') && (grid[2][2] == ' ')) {
+                grid[2][2] = '0';
+                return;
+        } else if ((grid[0][0] == 'X') && (grid[1][1] == ' ') && (grid[2][2] == 'X')) {
+                grid[1][1] = '0';
+                return;
+        } else if ((grid[0][0] == ' ') && (grid[1][1] == 'X') && (grid[2][2] == 'X')) {
+                grid[0][0] = '0';
+                return;
+        }
+
+        // checking for secondary diagonal
+        if ((grid[0][2] == 'X') && (grid[1][1] == 'X') && (grid[2][0] == ' ')) {
+                grid[2][0] = '0';
+                return;
+        } else if ((grid[0][2] == 'X') && (grid[1][1] == ' ') && (grid[2][0] == 'X')) {
+                grid[1][1] = '0';
+                return;
+        } else if ((grid[0][2] == ' ') && (grid[1][1] == 'X') && (grid[2][0] == 'X')) {
+                grid[0][2] = '0';
+                return;
+        }
+
+        // other moves
+        srand((unsigned int) time(NULL));
+
+        while (1) {
+                m_i = rand() % 3;
+                m_j = rand() % 3;
+                if (grid[m_i][m_j] == ' ') {
+                        grid[m_i][m_j] = '0';
+                        return;
+                }
+        }
+
+ }
