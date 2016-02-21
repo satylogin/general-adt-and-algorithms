@@ -15,3 +15,11 @@ It also contains some sorting algorithms. These can be used indirectly to solve 
 Code for hashing using open chain uses mod function for mapping keys. User can change hash_function to uses whatever hashing they want to use. This is simply the simplest approach for getting key value.
 
 All hashing codes have the same encryption method. User is free to change the method and good change is welcome.
+
+The repository also contains a game of tick tak toe. user can play it by running it on terminal. The basic moves are based on random function but higher moves works according to algorithm. The users are welcomed to improve the computer's play. you can send me modified codes on my mail id.
+
+happy coding....
+
+mail - satyarthagrahari@gmail.com
+       iec2015018@iiita.ac.in
+       
