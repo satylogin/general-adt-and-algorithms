@@ -18,6 +18,9 @@ All hashing codes have the same encryption method. User is free to change the me
 
 The repository also contains a game of tick tak toe. user can play it by running it on terminal. The basic moves are based on random function but higher moves works according to algorithm. The users are welcomed to improve the computer's play. you can send me modified codes on my mail id.
 
+version 1.1 of tick tak toe game is a slight modification of the earlier version of game... 
+If you are interested in making other strategy games for example chess, contact me on my mail address.
+
 happy coding....
 
 mail - satyarthagrahari@gmail.com
