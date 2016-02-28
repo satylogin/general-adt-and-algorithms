@@ -21,6 +21,8 @@ The repository also contains a game of tick tak toe. user can play it by running
 version 1.1 of tick tak toe game is a slight modification of the earlier version of game... 
 If you are interested in making other strategy games for example chess, contact me on my mail address.
 
+version 1.0 of link list program is a simple implementation of link list. version 1.1 is stack implementation of link list.
+
 happy coding....
 
 mail - satyarthagrahari@gmail.com
