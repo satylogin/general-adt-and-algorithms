@@ -22,6 +22,7 @@ version 1.1 of tick tak toe game is a slight modification of the earlier version
 If you are interested in making other strategy games for example chess, contact me on my mail address.
 
 version 1.0 of link list program is a simple implementation of link list. version 1.1 is stack implementation of link list.
+version 1.2 of link list program is the queue implementation of link list.
 
 happy coding....
 
