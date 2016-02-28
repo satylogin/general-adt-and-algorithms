@@ -1,0 +1,306 @@
+/*
+ * Code by - Satyarth Agrahari, Program - link list, stack implementation
+ * ----------------------------------------------------------------------
+ * The following program is a c implementation of stack using linked list. 
+ * The root will be the main pointer that points at head. 
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define ERROR -99999999 // the error value
+
+typedef struct {
+	// to point at the top node
+	struct node *top; 
+} stack;
+
+// the structure of node to store data and the next pointer
+struct node {
+	int data;//to store data
+	struct node *next;//to store address of next node
+};
+
+//function prototype declarations
+struct node* new_node(int);			//to create new node
+void head(struct node**, int); 			//to insert data at the head of the list
+void tail(struct node **, int); 		// to insert data at the tail of the link list
+void print(struct node *); 			//to print the values in list
+int delete_head(struct node**); 		//to delete head node
+int delete_after(struct node*); 		//to delete after a given node
+void insert_after(struct node*, struct node *); //to insert data after the given node
+
+// stack functions
+stack* create_stack(void);	 		// to create a new stack and return the base address
+void push(stack *, int);			// to push data at the top of stack
+int pop(stack *);				// to return and remove the top element of stack
+int Top(stack *);				// to return the top element of the stack
+int is_empty(stack *); 				// to check whether the stack is empty or not
+
+int main()
+{
+	int data, index, check;
+	char str[30];
+	
+	//the main pointer to point at the head of the link list
+	struct node *root = NULL;
+
+	//driver program, user has to type exit to stop the program
+	//user can also modyfy the driver program according to his wish.
+	printf("Write stack or link_list to proceed\n");
+	scanf("%s", str);
+
+	if (strcmp(str, "link_list") == 0) {
+		while (strcmp(str, "exit") != 0) {
+			if (strcmp(str, "head") == 0) {
+				scanf("%d", &data);
+				head(&root, data);
+			} else if (strcmp(str, "print") == 0) {
+				print(root);
+			} else if (strcmp(str, "delete_head") == 0) {
+				check = delete_head(&root);
+				if (check == ERROR) {
+					printf("Cannot delete from an empty list\n");
+				} else {
+					printf("The data at head was %d\n", check);
+				}
+			} else if (strcmp(str, "tail") == 0) {
+				scanf("%d", &data);
+				tail(&root, data);
+			}
+
+			scanf("%s", str);
+		}
+	} else if (strcmp(str, "stack") == 0) {
+		stack *s = create_stack();
+		while (strcmp(str, "exit") != 0) {
+			if (strcmp(str, "top") == 0) {
+				data = Top(s);
+				if (data == ERROR) {
+					printf("The stack is empty\n");
+				} else {
+					printf("The data on top of stack is %d\n", data);
+				}
+			} else if (strcmp(str, "pop") == 0) {
+				data = pop(s);
+				if (data == ERROR) {
+					printf("The stack is empty\n");
+				} else {
+					printf("The data on the top of stack was %d\n", data);
+				}
+			} else if (strcmp(str, "push") == 0) {
+				scanf("%d", &data);
+				push(s, data);
+			}
+
+			scanf("%s", str);
+		}
+	}
+	
+	return 0;
+}
+
+/* *
+ * new_node()
+ * -----------------------------------------------------
+ * This function takes an integer argument.It creates a new
+ * node and insert the value of data. The pointer points to 
+ * NULL. The address of new node is returned back.
+ */
+struct node* new_node(int data)
+{
+	struct node *p;
+	p = (struct node*)malloc(sizeof(struct node)); //allocating memory to pointer
+	p->data = data; //putting in data
+	p->next = NULL; //next points to NULL
+	return p;
+}
+
+/* *
+ * head()
+ * -----------------------------------------------------
+ * This function takes an integer argument and the address of 
+ * the main pointer. It adds the element to the head of the list.
+ * This function does not return any value.
+ */
+void head(struct node **root, int data)
+{
+	struct node *tmp = new_node(data);
+	tmp->next = *root;
+	*root = tmp;
+}
+
+/* *
+ * tail()
+ * -----------------------------------------------------
+ * This function takes an integer argument and the address of 
+ * the main pointer. It adds the element to the tail of the list.
+ * This function does not return any value.
+ */
+void tail(struct node** root, int data)
+{
+	struct node *p, *tmp;
+	p = *root;
+	tmp = new_node(data);
+	if (p == NULL) {
+		*root = tmp;
+	} else {
+		while (p->next != NULL) {
+			p = p->next;
+		}
+		p->next = tmp;
+	}
+}
+
+/* *
+ * print()
+ * -----------------------------------------------------
+ * This function prints the whole list.
+ */
+void print(struct node *p)
+{
+	//check whether the list is empty
+	if (p == NULL) {
+		printf("The list is empty\n");
+	} else {
+		while (p != NULL) {
+			printf("%d ", p->data);
+			p = p->next;
+		}
+		printf("\n");
+	}
+}
+
+/* *
+ * delete_head()
+ * -----------------------------------------------------
+ * this function deletes the head node ans return the data
+ * that was present at the head of the list. If the list is empty
+ * it returns an error value.
+ */
+int delete_head(struct node** head)
+{
+	if (*head != NULL) {
+		struct node *p;
+		p = *head;
+		int x = (*head)->data;
+		(*head) = (*head)->next;
+		free(p);
+		return x;
+	}
+	return ERROR;
+}
+
+/* *
+ * delete_after()
+ * -----------------------------------------------------
+ * This function deletes the next node of a given node.
+ * It also returns the value stored in the node.
+ * In case there is no element at or after the node, an 
+ * error value is returned by the function.
+ */
+int delete_after(struct node *p)
+{
+	if (p != NULL && p->next != NULL) {
+		struct node *q;
+		q = p->next;
+		p->next = q->next;
+		free(q);	
+	} else {
+		return ERROR;
+	}
+}
+
+/* *
+ * insert_after()
+ * -----------------------------------------------------
+ * This function inserts a given node after the reference
+ * node. In case of empty list, an error value is printed 
+ * the screen.
+ */
+void insert_after(struct node* reference, struct node *tmp)
+{
+	if (reference != NULL) {
+		tmp->next = reference->next;
+		reference->next = tmp;
+	} else {
+		printf("Trying to insert data in empty list\n");
+	}
+}
+
+/* *
+ * create_stack()
+ * -----------------------------------------------------
+ * This function creates a new stack and return the base 
+ * address of the stack.
+ */
+stack* create_stack(void)
+{
+	stack *s = (stack *)malloc(sizeof(stack));
+	s->top = NULL;
+
+	return s;
+}
+
+/* *
+ * is_empty()
+ * -----------------------------------------------------
+ * This function checks whether the stack is empty or not.
+ * If the stack is empty, the value returned is true. If 
+ * The stack has atleast one element, then the value 
+ * returned is false.
+ */
+int is_empty(stack *s)
+{
+	return (s->top == NULL);
+}
+
+/* *
+ * top_()
+ * -----------------------------------------------------
+ * This function returns the top most element of the stack
+ * if the stack has atleast one element. If the stack is 
+ * empty, ERROR is returned.
+ */
+int Top(stack *s)
+{
+	if (is_empty(s)) {
+		return ERROR;
+	} else {
+		return (s->top->data);
+	}
+}
+
+/* *
+ * pop()
+ * -----------------------------------------------------
+ * This function returns the top most element of the stack
+ * and then removes it from the stack, if the stack has 
+ * atleast one element. If the stack is empty, ERROR is 
+ * returned.
+ */
+int pop(stack *s)
+{
+	if (is_empty(s)) {
+		return ERROR;
+	} else {
+		int data;
+		data = s->top->data;
+		s->top = s->top->next;
+
+		return data;
+	}
+}
+
+/* *
+ * push()
+ * -----------------------------------------------------
+ * This function push the data at the top of the stack.
+ */
+void push(stack *s, int data)
+{
+	struct node *p = new_node(data);
+	p->next = s->top;
+	s->top = p;
+}
