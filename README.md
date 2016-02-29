@@ -23,6 +23,7 @@ If you are interested in making other strategy games for example chess, contact 
 
 version 1.0 of link list program is a simple implementation of link list. version 1.1 is stack implementation of link list.
 version 1.2 of link list program is the queue implementation of link list.
+There was some changes in code of link list. The return value of delete after was missing. That has been corrected and the files are updated.
 
 happy coding....
 
