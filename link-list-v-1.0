@@ -164,10 +164,13 @@ int delete_head(struct node** head)
 int delete_after(struct node *p)
 {
 	if (p != NULL && p->next != NULL) {
+		int data; // correction from prev
 		struct node *q;
 		q = p->next;
+		data = q->data;// correction from prev
 		p->next = q->next;
-		free(q);	
+		free(q);
+		return data; // correction from prev
 	} else {
 		return ERROR;
 	}
