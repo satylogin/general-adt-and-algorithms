@@ -1,0 +1,57 @@
+/* *
+ * Code - Square root of number using Binary Search 
+ * ------------------------------------------------
+ * The following is a c++ implementation of getting
+ * Square root of a number using binary search. This 
+ * can be implemented similarly in c language. 
+ */
+#include <iostream>
+using namespace std;
+
+// to find the square root
+// of a given number
+float square_root(int );
+
+int main() 
+{
+	int n;
+	cin >> n;
+	cout << square_root(n) << endl;
+
+	return 0;
+}
+
+/* *
+ * square_root()
+ * ---------------------------------------------
+ * The function uses binary search to search for 
+ * the root of number in real line.
+ */
+float square_root(int n)
+{
+	float start, mid, end;
+	int count = 0;
+	start = 0;
+	end = n;
+
+	while (start < end) {
+		count++;
+
+		// to get a value to check
+		mid = (start + end) / 2;
+
+		// if we have our square root number
+		if (mid*mid == n) {
+			return mid;
+		} else if (mid*mid < n) {
+			// the number will be higher
+			start = mid;
+		} else {
+			// the number will be lower
+			end = mid;
+		}
+
+		// counter to prevent infinite loop
+		if (count == 10000) return mid;
+	}
+}
