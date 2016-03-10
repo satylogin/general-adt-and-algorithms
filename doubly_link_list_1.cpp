@@ -35,8 +35,11 @@ void delete_after(node *);			// to delete node after reference node.
 node* delete_after_x(node *, int);		// to delete the node after the node with value x
 int size(node *);				// to get the size of the list.
 void print_palindrom(node *);			// to print the list in palindromic style.
+node* simple_sort(node *);			// to sort data in list.
+node* swap(node*, node*, node*);		// to swap nodes.
 node* merge_sort(node *);			// sorting data in link list.
 node* merge(node *, node *);			// to merge data in sorted order.
+node* sorted_insert(node *, node *);		// to insert a node in sorted list.
 
 // the main program
 int main()
@@ -73,7 +76,7 @@ int main()
 		} else if (strcmp(str, "print_palindrom") == 0) {
 			print_palindrom(root);
 		} else if (strcmp(str, "simple_sort") == 0) {
-			simple_sort(root);
+			root = simple_sort(root);
 		} else if (strcmp(str, "merge_sort") == 0) {
 			root = merge_sort(root);
 		}
@@ -388,6 +391,63 @@ void print_palindrom(node *root)
 }
 
 /* *
+ * simple_sort()
+ * ---------------------------------------------------------------------------
+ * this is a simple bubble sort algorithm for sorting link list.
+ */
+node* simple_sort(node *root)
+{
+	if (root != NULL) {
+		node *tmp = NULL, *p;
+		while (root != NULL) {
+			p = root;
+			root = root->next;
+
+			tmp = sorted_insert(tmp, p);
+		}
+		root = tmp;
+	}
+
+	return root;
+}
+
+/* *
+ * swap()
+ * --------------------------------------------------------------------------
+ * this function is used to swap node a with node b, third agrument is head
+ * node of the list.
+ */
+node* swap(node *a, node *b, node *root)
+{
+	if ((a != NULL) && (b != NULL)) {
+		node *p;
+		p = new_node(ERROR);
+
+		p->prev = b->prev;
+		if (b->prev != NULL) b->prev->next = p;
+		p->next = b->next;
+		if (b->next != NULL) b->next->prev = p;
+
+		b->prev = a->prev;
+		if (a->prev != NULL) a->prev->next = b;
+		b->next = a->next;
+		if (a->next != NULL) a->next->prev = b;
+
+		a->prev = p->prev;
+		if (p->prev != NULL) p->prev->next = a;
+		a->next = p->next;
+		if (p->next != NULL) p->next->prev = b;
+
+		free(p);
+
+		if (a == root) {
+			return b;
+		}
+	}
+	return root;
+}
+
+/* *
  * merge_sort()
  * -------------------------------------------------------------------------
  * this is divide part of divivde and conquer algorithm. we divide the list
@@ -484,6 +544,48 @@ node* merge(node *a, node *b)
 			}
 		}
 
+		return root;
+	}
+}
+
+node* sorted_insert(node *root, node *tmp)
+{
+	if (root == NULL) {
+		tmp->next = NULL;
+		tmp->prev = NULL;
+		return tmp;
+	} else {
+		if (tmp->data <= root->data) {
+			tmp->next = root;
+			root->prev = tmp;
+			tmp->prev = NULL;
+			return tmp;
+		} else {
+			node *p;
+			p = root;
+			while ((p->next != NULL) && (p->data <= tmp->data)) {
+				p = p->next;
+			}
+			if (p->next == NULL) {
+				if (p->data > tmp->data) {
+					p = p->prev;
+					tmp->next = p->next;
+					tmp->prev = p;
+					p->next = tmp;
+					tmp->next->prev = tmp;
+				} else {
+					p->next = tmp;
+					tmp->prev = p;
+					tmp->next = NULL;
+				}
+			} else {
+				p = p->prev;
+				tmp->next = p->next;
+				tmp->prev = p;
+				p->next = tmp;
+				tmp->next->prev = tmp;
+			}
+		}
 		return root;
 	}
 }
