@@ -40,6 +40,8 @@ node* swap(node*, node*, node*);		// to swap nodes.
 node* merge_sort(node *);			// sorting data in link list.
 node* merge(node *, node *);			// to merge data in sorted order.
 node* sorted_insert(node *, node *);		// to insert a node in sorted list.
+node* reverse_list(node *);			// to reverse the list.
+node* bubble_sort(node *);			// to sort the list using bubble sort algorithm.
 
 // the main program
 int main()
@@ -79,6 +81,10 @@ int main()
 			root = simple_sort(root);
 		} else if (strcmp(str, "merge_sort") == 0) {
 			root = merge_sort(root);
+		} else if (strcmp(str, "reverse_list") == 0) {
+			root = reverse_list(root);
+		} else if (strcmp(str, "bubble_sort") == 0) {
+			root = bubble_sort(root);
 		}
 
 		cin >> str;
@@ -393,7 +399,7 @@ void print_palindrom(node *root)
 /* *
  * simple_sort()
  * ---------------------------------------------------------------------------
- * this is a simple bubble sort algorithm for sorting link list.
+ * this is a simple insertion sort algorithm for sorting link list.
  */
 node* simple_sort(node *root)
 {
@@ -436,7 +442,7 @@ node* swap(node *a, node *b, node *root)
 		a->prev = p->prev;
 		if (p->prev != NULL) p->prev->next = a;
 		a->next = p->next;
-		if (p->next != NULL) p->next->prev = b;
+		if (p->next != NULL) p->next->prev = a;
 
 		free(p);
 
@@ -548,6 +554,12 @@ node* merge(node *a, node *b)
 	}
 }
 
+/* *
+ * sorted_insert()
+ * ----------------------------------------------------------------------
+ * this function inserts the node in the list maintining sorted property 
+ * of the list.
+ */
 node* sorted_insert(node *root, node *tmp)
 {
 	if (root == NULL) {
@@ -588,4 +600,59 @@ node* sorted_insert(node *root, node *tmp)
 		}
 		return root;
 	}
+}
+
+/* *
+ * reverse_list()
+ * ----------------------------------------------------------------------------
+ * this function is used to reverse the list.
+ */
+node* reverse_list(node *root)
+{
+	if ((root == NULL) || (root->next == NULL)) {
+		return root;
+	}
+
+	node *p, *q;
+	p = root->next;
+	q = NULL;
+	while (root != NULL) {
+		root->next = q;
+		root->prev = p;
+		q = root;
+		root = p;
+		if (p != NULL) {
+			p = p->next;	
+		}
+	}
+	root = q;
+
+	return root;
+}
+
+/* *
+ * bubble_sort()
+ * -----------------------------------------------------------------------------
+ * the following function is used to sort the doubly link list using bubble
+ * sort algorithm.
+ */
+node* bubble_sort(node *root)
+{
+	node *p, *q, *tmp, *aux;
+	p = root;
+	while (p != NULL) {
+		q = p->next;
+		while (q != NULL) {
+			if (p->data > q->data) {
+				root = swap(p, q, root);
+				tmp = p;
+				p = q;
+				q = tmp;
+			}
+			q = q->next;
+		}
+		p = p->next;
+	}
+
+	return root;
 }
