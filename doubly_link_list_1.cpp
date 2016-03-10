@@ -35,6 +35,8 @@ void delete_after(node *);			// to delete node after reference node.
 node* delete_after_x(node *, int);		// to delete the node after the node with value x
 int size(node *);				// to get the size of the list.
 void print_palindrom(node *);			// to print the list in palindromic style.
+node* merge_sort(node *);			// sorting data in link list.
+node* merge(node *, node *);			// to merge data in sorted order.
 
 // the main program
 int main()
@@ -70,6 +72,10 @@ int main()
 			cout << "The size of list is " << size(root) << endl;
 		} else if (strcmp(str, "print_palindrom") == 0) {
 			print_palindrom(root);
+		} else if (strcmp(str, "simple_sort") == 0) {
+			simple_sort(root);
+		} else if (strcmp(str, "merge_sort") == 0) {
+			root = merge_sort(root);
 		}
 
 		cin >> str;
@@ -378,5 +384,106 @@ void print_palindrom(node *root)
 			root = root->prev;
 		}
 		cout << root->data << endl;
+	}
+}
+
+/* *
+ * merge_sort()
+ * -------------------------------------------------------------------------
+ * this is divide part of divivde and conquer algorithm. we divide the list
+ * continuously into two parts and then merge them back in sorted order.
+ */
+node* merge_sort(node *root)
+{
+	if ((root != NULL) && (root->next != NULL)) {
+		node *a, *b;
+		a = root;
+		b = root->next;
+
+		// break the list into two parts
+		while ((b != NULL) && (b->next != NULL)) {
+			a = a->next;
+			b = b->next;
+			if (b != NULL) {
+				b = b->next;
+			} else {
+				break;
+			}
+		}
+		b = a->next;
+		a->next = NULL;
+		b->prev = NULL;
+		a = root;
+
+		// call merge_sort
+		a = merge_sort(a);
+		b = merge_sort(b);
+
+		// merge the sorted part
+		root = merge(a, b);
+	}
+
+	return root;
+}
+/* *
+ * merge()
+ * ----------------------------------------------------------------------------
+ * this function combines two sorted array in sorted order.
+ */
+node* merge(node *a, node *b)
+{
+	node *root, *p;
+	if (a == NULL) {
+		return b;
+	} else if (b == NULL) {
+		return a;
+	} else {
+		// checking for the first data
+		if (a->data <= b->data) {
+			root = a;
+			a = a->next;
+			p = root;
+			if (a != NULL) {
+				a->prev = NULL;
+			}
+			root->next = NULL;
+		} else {
+			root = b;
+			b = b->next;
+			p = root;
+			if (b != NULL) {
+				b->prev = NULL;
+			}
+			root->next = NULL;
+		}	
+
+		// filling in the other values
+		while ((a != NULL) && (b != NULL)) {
+			if (a->data <= b->data) {
+				p->next = a;
+				a->prev = p;
+				a = a->next;
+			} else {
+				p->next = b;
+				b->prev = p;
+				b = b->next;
+			}
+			p = p->next;
+		}
+
+		// search for the node that is non empty
+		if (a == NULL) {
+			p->next = b;
+			if (b != NULL) {
+				b->prev = p;
+			}
+		} else if (b == NULL) {
+			p->next = a;
+			if (a  != NULL) {
+				a->prev = p;
+			}
+		}
+
+		return root;
 	}
 }
